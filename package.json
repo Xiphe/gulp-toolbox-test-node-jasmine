@@ -1,0 +1,18 @@
+{
+  "name": "gulp-toolbox-node-jasmine",
+  "version": "0.0.0",
+  "description": "jasmine test toolbox for node",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "gulp",
+    "toolbox",
+    "ootb",
+    "jasmine",
+    "node"
+  ],
+  "author": "Hanes Diercks <gulp-toolbox@xiphe.net>",
+  "license": "MIT"
+}
