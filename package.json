@@ -14,5 +14,8 @@
     "node"
   ],
   "author": "Hanes Diercks <gulp-toolbox@xiphe.net>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "jasmine": "^2.3.2"
+  }
 }
