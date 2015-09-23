@@ -1,5 +1,5 @@
 {
-  "name": "gulp-toolbox-node-jasmine",
+  "name": "gulp-toolbox-test-node-jasmine",
   "version": "0.0.0",
   "description": "jasmine test toolbox for node",
   "main": "index.js",
