@@ -1,5 +1,8 @@
-module.exports = function(gulp) {
+module.exports = function(gulp, hook) {
   'use strict';
+
+  hook.add('test', 'test-node-jasmine');
+  hook.add('pre-release', 'test-node-jasmine');
 
   gulp.task(
     'test-node-jasmine',
