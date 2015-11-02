@@ -1,4 +1,4 @@
-module.exports = function(gulp) {
+module.exports = function() {
   'use strict';
 
   var spawn = require('child_process').spawn;
@@ -20,5 +20,5 @@ module.exports = function(gulp) {
   }
   testNodeJasmine.description = 'execute node unit test with jasmine';
 
-  gulp.task('test:node:jasmine', testNodeJasmine);
+  return testNodeJasmine;
 };
