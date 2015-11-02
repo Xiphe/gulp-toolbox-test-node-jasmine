@@ -1,26 +1,24 @@
-module.exports = function(gulp, hook) {
+module.exports = function(gulp) {
   'use strict';
 
-  hook.add('test', 'test-node-jasmine');
-  hook.add('pre-release', 'test-node-jasmine');
+  var spawn = require('child_process').spawn;
+  var path = require('path');
+  var jasmineCli = path.join(__dirname, 'jasmine.js');
 
-  gulp.task(
-    'test-node-jasmine',
-    'execute node unit test with jasmine',
-    function() {
-      var Jasmine = require('jasmine');
-      var jasmine = new Jasmine();
+  function testNodeJasmine() {
+    var config = {
+      'spec_dir': 'test',
+      'spec_files': [
+          '**/*Spec.js'
+      ],
+      helpers: []
+    };
 
-      jasmine.loadConfig({
-        'spec_dir': 'test',
-        'spec_files': [
-            '**/*Spec.js'
-        ],
-        helpers: []
-      });
+    return spawn('node', [jasmineCli, JSON.stringify(config)], {
+      stdio: 'inherit'
+    });
+  }
+  testNodeJasmine.description = 'execute node unit test with jasmine';
 
-      jasmine.execute();
-    }
-  );
-
+  gulp.task('test:node:jasmine', testNodeJasmine);
 };
