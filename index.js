@@ -1,17 +1,17 @@
-module.exports = function() {
-  'use strict';
+'use strict';
 
-  var spawn = require('child_process').spawn;
-  var path = require('path');
-  var jasmineCli = path.join(__dirname, 'jasmine.js');
+var spawn = require('child_process').spawn;
+var path = require('path');
+var jasmineCli = path.join(__dirname, 'jasmine.js');
 
+module.exports = function testNodeJasmineFactory() {
   function testNodeJasmine() {
     var config = {
       'spec_dir': 'test',
       'spec_files': [
-          '**/*Spec.js'
+        '**/*Spec.js'
       ],
-      helpers: []
+      'helpers': []
     };
 
     return spawn('node', [jasmineCli, JSON.stringify(config)], {
