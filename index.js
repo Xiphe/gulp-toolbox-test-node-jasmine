@@ -1,11 +1,20 @@
 'use strict';
 
-var spawn = require('child_process').spawn;
-var path = require('path');
-var jasmineCli = path.join(__dirname, 'jasmine.js');
+var meta = require('./package');
 
-module.exports = function testNodeJasmineFactory(requestConfig) {
-  var config = requestConfig({
+const annotate = (name, target) => {
+  target.displayName = name;
+
+  return target;
+};
+
+module.exports = {
+  meta,
+  config: {
+    'files.library': {
+      as: 'library',
+      default: 'lib/**/*.js'
+    },
     'files.test.node.specs': {
       as: 'spec_files',
       default: ['test/node/**/*Spec.js']
@@ -14,16 +23,28 @@ module.exports = function testNodeJasmineFactory(requestConfig) {
       as: 'helpers',
       default: ['']
     }
-  });
+  },
+  getTask(undertaker) {
+    const config = this.config;
 
-  config['spec_dir'] = '';
+    config['spec_dir'] = '';
 
-  function testNodeJasmine() {
-    return spawn('node', [jasmineCli, JSON.stringify(config)], {
-      stdio: 'inherit'
-    });
+    return undertaker.series(
+      'optional:coverage:istanbul',
+      annotate('executeTestNodeJasmine', (done) => {
+        const Jasmine = require('jasmine');
+        const jasmine = new Jasmine();
+
+        jasmine.loadConfig(config);
+        jasmine.onComplete((passed) => {
+          if (!passed) {
+            return done(new Error('jasmine specs did not pass'));
+          }
+
+          done();
+        });
+        jasmine.execute();
+      })
+    );
   }
-  testNodeJasmine.description = 'execute node unit test with jasmine';
-
-  return testNodeJasmine;
 };
