@@ -1,12 +1,8 @@
 'use strict';
 
-var meta = require('./package');
-
-const annotate = (name, target) => {
-  target.displayName = name;
-
-  return target;
-};
+const meta = require('./package');
+const annotate = require('./lib/annotate');
+const forFileInStream = require('./lib/forFileInStream');
 
 module.exports = {
   meta,
@@ -22,28 +18,57 @@ module.exports = {
     'files.test.node.helpers': {
       as: 'helpers',
       default: ['']
+    },
+    'test.node.jasmine.preloadLibrary': {
+      as: 'preload',
+      default: true
     }
   },
-  getTask(undertaker) {
+  getTask(gulp) {
+    const clearRequire = require('clear-require');
+    const through = require('through2');
+    const Jasmine = require('jasmine');
+    const Reporter = require('jasmine-terminal-reporter');
     const config = this.config;
+    const clearCache = forFileInStream(clearRequire);
+    const preloadLibrary = forFileInStream(require);
+
+    const executeJasmine = (cb) => {
+      const jasmine = new Jasmine();
+
+      jasmine.addReporter(new Reporter({
+        isVerbose: true
+      }));
+      jasmine.loadConfig(config);
+      jasmine.onComplete((passed) => {
+        if (!passed) {
+          return cb(annotate.noStack(new Error('jasmine specs did not pass')));
+        }
+
+        cb();
+        process.emit('coverage:istanbul:report');
+      });
+      jasmine.execute();
+    };
 
     config['spec_dir'] = '';
 
-    return undertaker.series(
+    return gulp.series(
       'optional:coverage:istanbul',
-      annotate('executeTestNodeJasmine', (done) => {
-        const Jasmine = require('jasmine');
-        const jasmine = new Jasmine();
-
-        jasmine.loadConfig(config);
-        jasmine.onComplete((passed) => {
-          if (!passed) {
-            return done(new Error('jasmine specs did not pass'));
+      annotate.name('executeTestNodeJasmine', () => {
+        const exc = (cb) => {
+          if (config.preload) {
+            gulp.src(config.library)
+              .pipe(through.obj(preloadLibrary, () => {
+                executeJasmine(cb);
+              }));
+          } else {
+            executeJasmine(cb);
           }
+        };
 
-          done();
-        });
-        jasmine.execute();
+        return gulp.src(config.spec_files)
+          .pipe(through.obj(clearCache, exc));
       })
     );
   }

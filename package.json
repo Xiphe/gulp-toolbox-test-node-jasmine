@@ -20,7 +20,11 @@
     "node": "^5.0.0"
   },
   "dependencies": {
-    "jasmine": "^2.3.2"
+    "clear-require": "1.0.1",
+    "jasmine": "2.3.2",
+    "jasmine-terminal-reporter": "1.0.0",
+    "require-reload": "0.2.2",
+    "through2": "2.0.0"
   },
   "peer-dependencies": {
     "gulp": "gulpjs/gulp#^4.0.0",
