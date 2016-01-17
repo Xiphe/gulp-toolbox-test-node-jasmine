@@ -14,7 +14,7 @@
     "node"
   ],
   "author": "Hanes Diercks <gulp-toolbox@xiphe.net>",
-  "bugs": "nope",
+  "bugs": "https://github.com/Xiphe/gulp-toolbox-test-node-jasmine/issues",
   "license": "MIT",
   "engines": {
     "node": "^5.0.0"
