@@ -54,7 +54,7 @@ module.exports = {
     config['spec_dir'] = '';
 
     return gulp.series(
-      'optional:coverage:istanbul',
+      'optional:coverage:istanbul?watch=false',
       annotate.name('executeTestNodeJasmine', () => {
         const exc = (cb) => {
           if (config.preload) {
