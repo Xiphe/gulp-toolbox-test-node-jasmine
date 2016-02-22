@@ -23,7 +23,6 @@
     "clear-require": "1.0.1",
     "jasmine": "2.4.1",
     "jasmine-terminal-reporter": "1.0.1",
-    "require-reload": "0.2.2",
     "through2": "2.0.1"
   },
   "peer-dependencies": {
