@@ -1,8 +1,35 @@
 'use strict';
 
+const path = require('path');
 const meta = require('./package');
-const annotate = require('./lib/annotate');
-const forFileInStream = require('./lib/forFileInStream');
+const annotate = {
+  name(name, target) {
+    target.displayName = name;
+
+    return target;
+  },
+  noStack(target) {
+    target.showStack = false;
+    return target;
+  }
+};
+
+function forFileInStream(action) {
+  return (file, __, cb) => {
+    if (file.isNull()) {
+      cb(null, file);
+      return;
+    }
+
+    if (file.isStream()) {
+      cb(new Error('Streaming not supported'));
+      return;
+    }
+
+    action(path.resolve(file.path));
+    cb(null, file);
+  };
+}
 
 module.exports = {
   meta,
