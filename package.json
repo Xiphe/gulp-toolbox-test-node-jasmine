@@ -1,10 +1,10 @@
 {
   "name": "gulp-toolbox-test-node-jasmine",
-  "version": "0.0.0",
   "description": "execute node unit test with jasmine",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Intended: no test specified\" && exit 0",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "keywords": [
     "gulp",
@@ -28,5 +28,12 @@
   },
   "peer-dependencies": {
     "gulp-toolbox-registry": "^0.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Xiphe/gulp-toolbox-test-node-jasmine.git"
+  },
+  "devDependencies": {
+    "semantic-release": "^4.3.5"
   }
 }
