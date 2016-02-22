@@ -27,7 +27,6 @@
     "through2": "2.0.0"
   },
   "peer-dependencies": {
-    "gulp": "gulpjs/gulp#^4.0.0",
     "gulp-toolbox-registry": "^0.0.0"
   }
 }
