@@ -39,63 +39,60 @@ module.exports = {
       default: 'lib/**/*.js'
     },
     'files.test.node.specs': {
-      as: 'spec_files',
+      as: 'specFiles',
       default: ['test/node/**/*Spec.js']
-    },
-    'files.test.node.helpers': {
-      as: 'helpers',
-      default: ['']
     },
     'test.node.jasmine.preloadLibrary': {
       as: 'preload',
       default: true
     }
   },
-  getTask(gulp) {
+  get(helper) {
     const clearRequire = require('clear-require');
     const through = require('through2');
     const Jasmine = require('jasmine');
     const Reporter = require('jasmine-terminal-reporter');
-    const config = this.config;
-    const clearCache = forFileInStream(clearRequire);
-    const preloadLibrary = forFileInStream(require);
+    const reRequire = forFileInStream((file) => {
+      clearRequire(file);
+      require(file);
+    });
 
-    const executeJasmine = (cb) => {
+    const executeJasmine = (specFiles, cb) => {
       const jasmine = new Jasmine();
 
       jasmine.addReporter(new Reporter({
         isVerbose: true
       }));
-      jasmine.loadConfig(config);
       jasmine.onComplete((passed) => {
         if (!passed) {
           return cb(annotate.noStack(new Error('jasmine specs did not pass')));
         }
 
+        helper.emit('report:coverage:istanbul');
         cb();
-        process.emit('coverage:istanbul:report');
       });
-      jasmine.execute();
+
+      specFiles.pipe(through.obj(reRequire, () => {
+        jasmine.execute();
+      }));
     };
 
-    config['spec_dir'] = '';
+    return helper.series(
+      annotate.name('executeTestNodeJasmine', (cb) => {
+        const config = helper.getConfig();
+        const libraryFiles = helper.src(config.library)
+          .pipe(helper.getPipe('coverage:istanbul', {optional: true}));
+        const specFiles = helper.src(config.specFiles);
 
-    return gulp.series(
-      'optional:coverage:istanbul?watch=false',
-      annotate.name('executeTestNodeJasmine', () => {
-        const exc = (cb) => {
-          if (config.preload) {
-            gulp.src(config.library)
-              .pipe(through.obj(preloadLibrary, () => {
-                executeJasmine(cb);
-              }));
-          } else {
-            executeJasmine(cb);
-          }
-        };
+        if (config.preload) {
+          return libraryFiles.pipe(
+            through.obj(reRequire, () => {
+              return executeJasmine(specFiles, cb);
+            })
+          );
+        }
 
-        return gulp.src(config.spec_files)
-          .pipe(through.obj(clearCache, exc));
+        return executeJasmine(specFiles, cb);
       })
     );
   }
