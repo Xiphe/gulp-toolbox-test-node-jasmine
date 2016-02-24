@@ -33,6 +33,8 @@
     "url": "https://github.com/Xiphe/gulp-toolbox-test-node-jasmine.git"
   },
   "devDependencies": {
-    "semantic-release": "^4.3.5"
+    "eslint": "2.2.0",
+    "eslint-config-airbnb": "6.0.2",
+    "semantic-release": "4.3.5"
   }
 }

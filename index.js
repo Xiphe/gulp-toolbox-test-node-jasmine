@@ -2,17 +2,7 @@
 
 const path = require('path');
 const meta = require('./package');
-const annotate = {
-  name(name, target) {
-    target.displayName = name;
-
-    return target;
-  },
-  noStack(target) {
-    target.showStack = false;
-    return target;
-  }
-};
+const annotate = require('./annotate');
 
 function forFileInStream(action) {
   return (file, __, cb) => {
@@ -36,16 +26,16 @@ module.exports = {
   config: {
     'files.library': {
       as: 'library',
-      default: 'lib/**/*.js'
+      default: 'lib/**/*.js',
     },
     'files.test.node.specs': {
       as: 'specFiles',
-      default: ['test/node/**/*Spec.js']
+      default: ['test/node/**/*Spec.js'],
     },
     'test.node.jasmine.preloadLibrary': {
       as: 'preload',
-      default: true
-    }
+      default: true,
+    },
   },
   get(helper) {
     const clearRequire = require('clear-require');
@@ -61,7 +51,7 @@ module.exports = {
       const jasmine = new Jasmine();
 
       jasmine.addReporter(new Reporter({
-        isVerbose: true
+        isVerbose: true,
       }));
       jasmine.onComplete((passed) => {
         if (!passed) {
@@ -69,7 +59,7 @@ module.exports = {
         }
 
         helper.emit('report:coverage:istanbul');
-        cb();
+        return cb();
       });
 
       specFiles.pipe(through.obj(reRequire, () => {
@@ -81,19 +71,17 @@ module.exports = {
       annotate.name('executeTestNodeJasmine', (cb) => {
         const config = helper.getConfig();
         const libraryFiles = helper.src(config.library)
-          .pipe(helper.getPipe('coverage:istanbul', {optional: true}));
+          .pipe(helper.getPipe('coverage:istanbul', { optional: true }));
         const specFiles = helper.src(config.specFiles);
 
         if (config.preload) {
           return libraryFiles.pipe(
-            through.obj(reRequire, () => {
-              return executeJasmine(specFiles, cb);
-            })
+            through.obj(reRequire, () => executeJasmine(specFiles, cb))
           );
         }
 
         return executeJasmine(specFiles, cb);
       })
     );
-  }
+  },
 };
