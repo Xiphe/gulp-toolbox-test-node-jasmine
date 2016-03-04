@@ -55,11 +55,10 @@ module.exports = {
       }));
       jasmine.onComplete((passed) => {
         if (!passed) {
-          return cb(annotate.noStack(new Error('jasmine specs did not pass')));
+          cb(annotate.noStack(new Error('jasmine specs did not pass')));
+        } else {
+          helper.emit('report:coverage:istanbul', cb);
         }
-
-        helper.emit('report:coverage:istanbul');
-        return cb();
       });
 
       specFiles.pipe(through.obj(reRequire, () => {
