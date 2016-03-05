@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "eslint": "2.3.0",
-    "eslint-config-airbnb": "6.0.2",
+    "eslint-config-airbnb": "6.1.0",
     "semantic-release": "4.3.5"
   }
 }
