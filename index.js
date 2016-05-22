@@ -64,7 +64,7 @@ module.exports = {
 
       specFiles.pipe(through.obj(reRequire, () => {
         jasmine.execute();
-      }));
+      })).on('data', () => { /* noop */ });
     };
 
     return helper.series(
