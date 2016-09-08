@@ -43,6 +43,7 @@ module.exports = {
     const through = require('through2');
     const Jasmine = require('jasmine');
     const Reporter = require('jasmine-terminal-reporter');
+
     const reRequire = forFileInStream((file) => {
       clearRequire(file);
       require(file);
