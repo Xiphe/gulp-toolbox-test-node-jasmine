@@ -1,4 +1,5 @@
 /* eslint no-param-reassign: 0 */
+
 'use strict';
 
 module.exports = {
