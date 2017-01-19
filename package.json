@@ -21,9 +21,9 @@
   },
   "dependencies": {
     "clear-require": "1.0.1",
-    "jasmine": "2.5.2",
+    "jasmine": "2.5.3",
     "jasmine-terminal-reporter": "1.0.2",
-    "through2": "2.0.1"
+    "through2": "2.0.3"
   },
   "peer-dependencies": {
     "gulp-toolbox-registry": "^0.1.0"
@@ -33,9 +33,9 @@
     "url": "https://github.com/Xiphe/gulp-toolbox-test-node-jasmine.git"
   },
   "devDependencies": {
-    "eslint": "3.10.1",
-    "eslint-config-airbnb-base": "10.0.1",
+    "eslint": "3.12.2",
+    "eslint-config-airbnb-base": "11.0.0",
     "eslint-plugin-import": "2.2.0",
-    "semantic-release": "4.3.5"
+    "semantic-release": "6.3.2"
   }
 }
