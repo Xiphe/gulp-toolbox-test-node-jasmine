@@ -22,7 +22,7 @@
   "dependencies": {
     "clear-require": "1.0.1",
     "jasmine": "2.5.3",
-    "jasmine-terminal-reporter": "1.0.2",
+    "jasmine-terminal-reporter": "1.0.3",
     "through2": "2.0.3"
   },
   "peer-dependencies": {
