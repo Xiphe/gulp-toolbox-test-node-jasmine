@@ -20,7 +20,7 @@
     "node": ">= 4.1"
   },
   "dependencies": {
-    "clear-require": "1.0.1",
+    "clear-require": "2.0.0",
     "jasmine": "2.5.3",
     "jasmine-terminal-reporter": "1.0.3",
     "through2": "2.0.3"
